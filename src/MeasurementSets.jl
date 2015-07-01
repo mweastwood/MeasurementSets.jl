@@ -27,30 +27,29 @@ function uvw(ms::Table)
     u,v,w
 end
 
-function freq(ms::Table)
-    spw = Table(ms[kw"SPECTRAL_WINDOW"])
-    ν = spw["CHAN_FREQ",1]
-    ν
-end
-
-function reference_frame(ms::Table)
-    frame = ReferenceFrame()
-    time   = Epoch(Measures.UTC,Quantity(ms["TIME",1],Second))
-    antpos = slice(Table(ms[kw"ANTENNA"])["POSITION"],:,1)
-    pos    = Measures.from_xyz_in_meters(Measures.ITRF,antpos[1],antpos[2],antpos[3])
-    set!(frame,time)
-    set!(frame,pos)
-    frame
-end
-
-function ants(ms::Table)
+function antennas(ms::Table)
     ant1 = ms["ANTENNA1"]
     ant2 = ms["ANTENNA2"]
     # (the +1 converts to a 1-based indexing scheme)
     ant1+1,ant2+1
 end
 
-function phase_dir(ms::Table)
+function frequency(ms::Table)
+    spw = Table(ms[kw"SPECTRAL_WINDOW"])
+    ν = spw["CHAN_FREQ",1]
+    ν
+end
+
+function time(ms::Table)
+    Epoch(Measures.UTC,Quantity(ms["TIME",1],Second))
+end
+
+function position(ms::Table)
+    antpos = slice(Table(ms[kw"ANTENNA"])["POSITION"],:,1)
+    Measures.from_xyz_in_meters(Measures.ITRF,antpos[1],antpos[2],antpos[3])
+end
+
+function phase_direction(ms::Table)
     field = Table(ms[kw"FIELD"])
     dir = field["PHASE_DIR"]
     Direction(Measures.J2000,Quantity(dir[1],Radian),Quantity(dir[2],Radian))
