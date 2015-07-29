@@ -37,7 +37,8 @@ end
 function frequency(ms::Table)
     spw = Table(ms[kw"SPECTRAL_WINDOW"])
     ν = spw["CHAN_FREQ",1]
-    ν
+    unlock(spw)
+    ν::Vector{Float64}
 end
 
 function time(ms::Table)
