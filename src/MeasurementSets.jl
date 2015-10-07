@@ -43,7 +43,7 @@ function frequency(ms::Table)
 end
 
 function time(ms::Table)
-    Epoch(Measures.UTC,Quantity(ms["TIME",1],Second))
+    Epoch(epoch"UTC",Quantity(ms["TIME",1],"s"))
 end
 
 function position(ms::Table)
