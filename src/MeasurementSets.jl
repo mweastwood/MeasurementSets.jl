@@ -17,7 +17,6 @@ __precompile__()
 
 module MeasurementSets
 
-using CasaCore.Quanta
 using CasaCore.Measures
 using CasaCore.Tables
 
@@ -49,13 +48,13 @@ end
 
 function position(ms::Table)
     antpos = slice(Table(ms[kw"ANTENNA"])["POSITION"],:,1)
-    Measures.from_xyz_in_meters(Measures.ITRF,antpos[1],antpos[2],antpos[3])
+    Measures.from_xyz_in_meters(pos"ITRF",antpos[1],antpos[2],antpos[3])
 end
 
 function phase_direction(ms::Table)
     field = Table(ms[kw"FIELD"])
     dir = field["PHASE_DIR"]
-    Direction(Measures.J2000,Quantity(dir[1],Radian),Quantity(dir[2],Radian))
+    Direction(dir"J2000",Quantity(dir[1],"rad"),Quantity(dir[2],"rad"))
 end
 
 @doc """
